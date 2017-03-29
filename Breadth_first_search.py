@@ -1,11 +1,19 @@
 from random import randint
 
-class Puzzle:
-    def __init__(self):
+class Puzzle(object):
+    """
+        8 Puzzle Game with
+            - random Board
+            - move space (or zero)
+            - show current Board position
+    """
+
+    def __init__(self, move_time):
         self.board = []
         self.move_h = None
         self.h1 = 0
         self.h2 = 0
+        self.random_board(move_time)
 
     def random_board(self, times):
         # add number into Board
@@ -43,18 +51,6 @@ class Puzzle:
                 move_before = 4
                 self.show()
 
-        # for i in range(0,times):
-        #     rand_dir = randint(1,4)
-        #     pos_0 = self.board.index(0)
-        #     if rand_dir == 1 and pos_0 > 2:
-        #         self.move(1) #Up
-        #     elif rand_dir == 2 and pos_0 < 6:
-        #         self.move(2) #Down
-        #     elif rand_dir == 3 and pos_0 != 0 and pos_0 != 3 and pos_0 != 6:
-        #         self.move(3) #Left
-        #     elif rand_dir == 4 and pos_0 != 2 and pos_0 != 5 and pos_0 != 8:
-        #         self.move(4) #Right
-
     def move(self, direction):
         # up = 1
         # down = 2
@@ -67,6 +63,7 @@ class Puzzle:
             self.board[pos_0 - 3] = 0
             self.h1 = self.h1 + 1
             self.move_h = "Up"
+            return self.board
 
         elif (direction == 2):
             pos_0 = self.board.index(0)
@@ -74,6 +71,7 @@ class Puzzle:
             self.board[pos_0 + 3] = 0
             self.h1 = self.h1 + 1
             self.move_h = "Down"
+            return self.board
 
         elif (direction == 3):
             pos_0 = self.board.index(0)
@@ -81,6 +79,7 @@ class Puzzle:
             self.board[pos_0 - 1] = 0
             self.h1 = self.h1 + 1
             self.move_h = "Left"
+            return self.board
 
         elif (direction == 4):
             pos_0 = self.board.index(0)
@@ -88,14 +87,13 @@ class Puzzle:
             self.board[pos_0 + 1] = 0
             self.h1 = self.h1 + 1
             self.move_h = "Right"
+            return self.board
 
     def show(self):
         if self.move_h is not None:
             print(self.move_h)
         for i in range(0, 9, 3):
-            print('[{}][{}][{}]' .format(puzz.board[i], puzz.board[i+1], puzz.board[i+2]))
+            print('[{}][{}][{}]' .format(self.board[i], self.board[i+1], self.board[i+2]))
 
-puzz = Puzzle()
-puzz.random_board(40)
-puzz.move(1)
-puzz.show()
+
+puzz = Puzzle(40)

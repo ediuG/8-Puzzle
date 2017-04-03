@@ -1,6 +1,6 @@
 from random import randint
 from collections import deque
-
+import copy
 
 class Puzzle(object):
     """
@@ -10,7 +10,7 @@ class Puzzle(object):
         - show current Board position
     """
 
-    def __init__(self, board=[]):
+    def __init__(self, board=[1, 2, 3, 4, 5, 6, 7, 8, ' ']):
         self.board = board
         self.move_history = None
         self.parent = None
@@ -76,24 +76,28 @@ class Puzzle(object):
             self.board[pos_0] = self.board[pos_0 - 3]
             self.board[pos_0 - 3] = ' '
             self.move_history = "Up"
+            # self.show()
 
         elif direction == 2:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 + 3]
             self.board[pos_0 + 3] = ' '
             self.move_history = "Down"
+            # self.show()
 
         elif direction == 3:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 - 1]
             self.board[pos_0 - 1] = ' '
             self.move_history = "Left"
+            # self.show()
 
         elif direction == 4:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 + 1]
             self.board[pos_0 + 1] = ' '
             self.move_history = "Right"
+            # self.show()
 
     def show(self):
         """
@@ -105,40 +109,66 @@ class Puzzle(object):
             print('[{}][{}][{}]' .format(self.board[i],
                                          self.board[i + 1], self.board[i + 2]))
 
+def is_in_set(sett, puzzle):
+    for i in range(0, len(sett)):
+        if puzzle.board == sett[i].board:
+            return False
+    return True
+
+
 def bfs(puzzle):
     s = []
+    ans = []
     queue = deque()
 
     s.append(puzzle)
     queue.append(puzzle)
 
-    while len(queue) > 0:
-        puzzle_temp = Puzzle(queue.popleft().board)
+    # while len(queue) > 0:
+    for y in range(0, 4):
+        puzzle_temp = copy.deepcopy(queue.popleft())
+        print("////////////////////")
+        puzzle_temp.show()
+        print("////////////////////")
+        # puzzle_temp = Puzzle(queue.popleft().board)
         if puzzle_temp.board == [1, 2, 3, 4, 5, 6, 7, 8, ' ']:
             print("found")
-            puzzle_temp.show()
+            while puzzle_temp.parent is not None:
+                ans.append(puzzle_temp)
+                puzzle_temp = puzzle_temp.parent
+            puzzle.show()
+            for i in reversed(range(len(ans), -1, -1)):
+                ans[i].show()
             break
         else:
             pos_0 = puzzle_temp.board.index(' ')
             for i in range(1, 5):
                 if (i == 1 and pos_0 > 2) or (i == 2 and pos_0 < 6) or (i == 3 and pos_0 != 0 and pos_0 != 3 and pos_0 != 6) or (i == 4 and pos_0 != 2 and pos_0 != 5 and pos_0 != 8):
-                    tmp = Puzzle(puzzle_temp.board)
+                    # print('puzzle_temp.board :> {} ' .format(puzzle_temp.board))
+                    # print(puzzle_temp)
+                    # tmp = Puzzle(puzzle_temp.board)
+                    tmp = copy.deepcopy(puzzle_temp)
                     tmp.move(i)
-                    # tmp.show()
-                    s.append(tmp)
-                    tmp.parent = puzzle_temp
-                    queue.append(tmp)
-        
-        print(len(s))
+                    if is_in_set(s, tmp):
+                        # print("tmp object moved")
+                        # print('tmp.board :> {} ' .format(tmp.board))
+                        s.append(tmp)
+                        tmp.parent = puzzle_temp
+                        queue.append(tmp)
+
+        # print(len(queue))
         for i in range(0, len(s)):
             s[i].show()
+        # print(puzzle.board)
         print("================================================")
+
 
 def main():
     puzz = Puzzle()
-    puzz.random_board(40)
+    puzz.random_board(2)
     print("_______________________start BFS___________________________")
-    # bfs(puzz)
+    bfs(puzz)
+
 
 if __name__ == '__main__':
     main()

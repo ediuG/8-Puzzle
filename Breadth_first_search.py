@@ -1,4 +1,5 @@
 from random import randint
+from collections import deque
 
 
 class Puzzle(object):
@@ -9,12 +10,10 @@ class Puzzle(object):
         - show current Board position
     """
 
-    def __init__(self, move_time):
-        self.board = []
-        self.move_h = None
-        self.h1 = 0
-        self.h2 = 0
-        self.random_board(move_time)
+    def __init__(self, board=[]):
+        self.board = board
+        self.move_history = None
+        self.parent = None
 
     def random_board(self, times):
         """
@@ -76,48 +75,70 @@ class Puzzle(object):
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 - 3]
             self.board[pos_0 - 3] = ' '
-            self.h1 = self.h1 + 1
-            self.move_h = "Up"
-            return self.board
+            self.move_history = "Up"
 
         elif direction == 2:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 + 3]
             self.board[pos_0 + 3] = ' '
-            self.h1 = self.h1 + 1
-            self.move_h = "Down"
-            return self.board
+            self.move_history = "Down"
 
         elif direction == 3:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 - 1]
             self.board[pos_0 - 1] = ' '
-            self.h1 = self.h1 + 1
-            self.move_h = "Left"
-            return self.board
+            self.move_history = "Left"
 
         elif direction == 4:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 + 1]
             self.board[pos_0 + 1] = ' '
-            self.h1 = self.h1 + 1
-            self.move_h = "Right"
-            return self.board
+            self.move_history = "Right"
 
     def show(self):
         """
             show board in console in 3x3 table
         """
-        if self.move_h is not None:
-            print(self.move_h)
+        if self.move_history is not None:
+            print(self.move_history)
         for i in range(0, 9, 3):
             print('[{}][{}][{}]' .format(self.board[i],
                                          self.board[i + 1], self.board[i + 2]))
 
+def bfs(puzzle):
+    s = []
+    queue = deque()
+
+    s.append(puzzle)
+    queue.append(puzzle)
+
+    while len(queue) > 0:
+        puzzle_temp = Puzzle(queue.popleft().board)
+        if puzzle_temp.board == [1, 2, 3, 4, 5, 6, 7, 8, ' ']:
+            print("found")
+            puzzle_temp.show()
+            break
+        else:
+            pos_0 = puzzle_temp.board.index(' ')
+            for i in range(1, 5):
+                if (i == 1 and pos_0 > 2) or (i == 2 and pos_0 < 6) or (i == 3 and pos_0 != 0 and pos_0 != 3 and pos_0 != 6) or (i == 4 and pos_0 != 2 and pos_0 != 5 and pos_0 != 8):
+                    tmp = Puzzle(puzzle_temp.board)
+                    tmp.move(i)
+                    # tmp.show()
+                    s.append(tmp)
+                    tmp.parent = puzzle_temp
+                    queue.append(tmp)
+        
+        print(len(s))
+        for i in range(0, len(s)):
+            s[i].show()
+        print("================================================")
 
 def main():
-    puzz = Puzzle(40)
-
+    puzz = Puzzle()
+    puzz.random_board(40)
+    print("_______________________start BFS___________________________")
+    # bfs(puzz)
 
 if __name__ == '__main__':
     main()

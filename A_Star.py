@@ -104,11 +104,37 @@ class Puzzle(object):
                                          self.board[i + 1], self.board[i + 2]))
 
 def astar(puzzle):
+    """
+        A star Search 
+    """
     pass
+    s = []
+    ans = []
+    queue = deque()
+    s.append(puzzle)
+    queue.append(puzzle)
+    
+    while len(queue) > 0:
+        puzzle_temp = copy.deepcopy(queue.popleft())
+        if puzzle_temp.board == [1,2,3,4,5,6,7,8,' ']:
+            print("found")
+            while puzzle_temp.parent is not None:
+                ans.append(puzzle_temp)
+                puzzle_temp = puzzle_temp.parent
+            
+            puzzle.show()
+            for i in range(len(ans)-1,-1,-1):
+                ans[i].show()
+            break
+        else:
+            #astar algorithm
+            pass
 
 def main():
     puzz = Puzzle()
     puzz.random_board(10)
+    print("---------------------Start A star search-----------------------")
     astar(puzz)
+
 if __name__ == '__main__':
     main()

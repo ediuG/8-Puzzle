@@ -103,6 +103,7 @@ class Puzzle(object):
             print('[{}][{}][{}]' .format(self.board[i],
                                          self.board[i + 1], self.board[i + 2]))
 
+
 def astar(puzzle):
     """
         A star Search
@@ -130,11 +131,13 @@ def astar(puzzle):
             # astar algorithm
             pass
 
+
 def main():
     puzz = Puzzle()
     puzz.random_board(10)
     print("---------------------Start A star search-----------------------")
     astar(puzz)
+
 
 if __name__ == '__main__':
     main()

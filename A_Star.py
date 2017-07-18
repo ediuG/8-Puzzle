@@ -103,32 +103,38 @@ class Puzzle(object):
             print('[{}][{}][{}]' .format(self.board[i],
                                          self.board[i + 1], self.board[i + 2]))
 
-def neighbor_node(puzzle):
-    neighbor = []
-    for
-    return
-
 def astar(puzzle):
-    puzzle_temp = copy.deepcopy(puzzle)
-    closed_set = []
-    open_set = [puzzle_temp]
+    """
+        A star Search
+    """
+    pass
+    s = []
+    ans = []
+    queue = deque()
+    s.append(puzzle)
+    queue.append(puzzle)
 
-    g_score = 0
-    h_score
-    f_score = g_score + h_score
+    while len(queue) > 0:
+        puzzle_temp = copy.deepcopy(queue.popleft())
+        if puzzle_temp.board == [1,2,3,4,5,6,7,8,' ']:
+            print("found")
+            while puzzle_temp.parent is not None:
+                ans.append(puzzle_temp)
+                puzzle_temp = puzzle_temp.parent
 
-    while len(open_set) > 0:
-        less_score_node = None
-        if x == [1, 2, 3, 4, 5, 6, 7, 8, ' ']:
-            return ans
-
-        open_set.remove(less_score_node)
-        closed_set.append(less_score_node)
-        for y in 
+            puzzle.show()
+            for i in range(len(ans)-1,-1,-1):
+                ans[i].show()
+            break
+        else:
+            #astar algorithm
+            pass
 
 def main():
     puzz = Puzzle()
     puzz.random_board(10)
+    print("---------------------Start A star search-----------------------")
     astar(puzz)
+
 if __name__ == '__main__':
     main()

@@ -2,6 +2,11 @@ import copy
 from collections import deque
 from random import randint
 
+"""
+TODO: astar algorithm
+
+"""
+
 
 class Puzzle(object):
     """
@@ -18,10 +23,11 @@ class Puzzle(object):
 
     def random_board(self, times):
         """
-            Create random board from the final form
+            Create random board from the final form to make sure
+            we can solve the problem
                 - [1][2][3]
-                  [4][5][6]
-                  [7][8][ ]
+                - [4][5][6]
+                - [7][8][ ]
         """
         self.board = [1, 2, 3, 4, 5, 6, 7, 8, ' ']
         print('show current board')
@@ -36,22 +42,22 @@ class Puzzle(object):
 
             if count == times:
                 break
-            elif rand_dir == 1 and pos_0 > 2 and move_before is not 2:
+            elif rand_dir == 1 and pos_0 > 2 and move_before != 2:
                 self.move(1)  # Up
                 count += 1
                 move_before = 1
                 self.show()
-            elif rand_dir == 2 and pos_0 < 6 and move_before is not 1:
+            elif rand_dir == 2 and pos_0 < 6 and move_before != 1:
                 self.move(2)  # Down
                 count += 1
                 move_before = 2
                 self.show()
-            elif rand_dir == 3 and pos_0 != 0 and pos_0 != 3 and pos_0 != 6 and move_before is not 4:
+            elif rand_dir == 3 and pos_0 != 0 and pos_0 != 3 and pos_0 != 6 and move_before != 4:
                 self.move(3)  # Left
                 count += 1
                 move_before = 3
                 self.show()
-            elif rand_dir == 4 and pos_0 != 2 and pos_0 != 5 and pos_0 != 8 and move_before is not 3:
+            elif rand_dir == 4 and pos_0 != 2 and pos_0 != 5 and pos_0 != 8 and move_before != 3:
                 self.move(4)  # Right
                 count += 1
                 move_before = 4
@@ -67,26 +73,32 @@ class Puzzle(object):
             - left = 3
             - right = 4
         """
+        direc = {
+            'up': 1,
+            'down': 2,
+            'left': 3,
+            'right': 4
+        }
 
-        if direction == 1:
+        if direction == direc['up']:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 - 3]
             self.board[pos_0 - 3] = ' '
             self.move_history = "Up"
 
-        elif direction == 2:
+        elif direction == direc['down']:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 + 3]
             self.board[pos_0 + 3] = ' '
             self.move_history = "Down"
 
-        elif direction == 3:
+        elif direction == direc['left']:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 - 1]
             self.board[pos_0 - 1] = ' '
             self.move_history = "Left"
 
-        elif direction == 4:
+        elif direction == direc['right']:
             pos_0 = self.board.index(' ')
             self.board[pos_0] = self.board[pos_0 + 1]
             self.board[pos_0 + 1] = ' '
@@ -101,7 +113,8 @@ class Puzzle(object):
             print(self.move_history)
         for i in range(0, 9, 3):
             print('[{}][{}][{}]' .format(self.board[i],
-                                         self.board[i + 1], self.board[i + 2]))
+                                         self.board[i + 1],
+                                         self.board[i + 2]))
 
 
 def astar(puzzle):
@@ -109,10 +122,10 @@ def astar(puzzle):
         A star Search
     """
     pass
-    s = []
+    tree = []
     ans = []
     queue = deque()
-    s.append(puzzle)
+    tree.append(puzzle)
     queue.append(puzzle)
 
     while len(queue) > 0:
@@ -129,10 +142,15 @@ def astar(puzzle):
             break
         else:
             # astar algorithm
+            
+
             pass
 
 
 def main():
+    """
+        Main function
+    """
     puzz = Puzzle()
     puzz.random_board(10)
     print("---------------------Start A star search-----------------------")
